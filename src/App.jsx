@@ -1,10 +1,13 @@
-import { Routes, Route } from 'react-router-dom';
-import BottomNav from './components/BottomNav';
-import Home from "./pages/Home/Home.jsx "
-
+import { Routes, Route } from "react-router-dom";
+import BottomNav from "./components/BottomNav";
+import Home from "../src/pages/Home/Home.jsx ";
 // Sahifalar hali yozilmagan, vaqtincha shu belgi turadi
 function Soon({ title }) {
-  return <div className="px-4 py-20 text-center text-xl text-[var(--hint)]">{title} (tez orada)</div>;
+  return (
+    <div className="px-4 py-20 text-center text-xl text-[var(--hint)]">
+      {title} (tez orada)
+    </div>
+  );
 }
 
 export default function App() {
