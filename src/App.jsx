@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
-import Home from './pages/home/home';
+import Home from "./pages/Home/Home.jsx "
 
 // Sahifalar hali yozilmagan, vaqtincha shu belgi turadi
 function Soon({ title }) {
