@@ -1,20 +1,47 @@
+import { useEffect, useState } from "react";
 import Card from "../../components/Card";
+import { Product } from "../../services/product";
+import { baseUrl } from "../../services/config";
 
-// Hozircha vaqtincha ro‘yxat. Backend kelganda shu massiv o‘rniga serverdan kelgan ma’lumot qo‘yiladi.
-const products = [
-  { id: 1, title: 'Erkaklar shimlari, chinoslar Duduka Trends', price: 100, oldPrice: null, rating: 3, reviews: 12, img: '' },
-  { id: 2, title: 'Fudbolka taby paxtadan', price: 80, oldPrice: 100, rating: 4, reviews: 30, img: '' },
-  { id: 3, title: 'Simsiz naushnik P9 MAX, mikrofonli', price: 55, oldPrice: 70, rating: 3, reviews: 8, img: '' },
-  { id: 4, title: 'Smartfon Samsung Galaxy A05s 4 GB RAM, 128 GB', price: 320, oldPrice: 400, rating: 5, reviews: 54, img: '' },
-];
+const getImg = (pictures) => {
+  let pic = pictures;
+  if (Array.isArray(pic)) pic = pic[0];
+  if (pic && typeof pic === "object") pic = pic.image || pic.picture || pic.url;
+  if (!pic) return "";
+  return pic.startsWith("http") ? pic : baseUrl + pic;
+};
 
-export default function ProductGrid({ title = 'Bugungi takliflar' }) {
+// Backend maydonlarini kartaga mos shaklga o'tkazadi
+const toCard = (p) => ({
+  id: p.id,
+  title: p.title,
+  img: getImg(p.pictures),
+  price: Number(p.discount_price || p.price),
+  oldPrice: p.discount_price ? Number(p.price) : null,
+  rating: Math.round(p.stars || 0),
+  reviews: p.review_quantity || 0,
+});
+
+export default function ProductGrid({ onAdd, likes, onLike }) {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    Product().then((data) => setProducts(data.map(toCard)));
+  }, []);
+
   return (
     <section className="mt-5">
-      <h2 className="px-4 pb-2.5 text-lg font-bold">{title}</h2>
+      <h2 className="px-4 pb-2.5 text-lg font-bold">Bugungi takliflar</h2>
+
       <div className="grid grid-cols-2 gap-3 px-4">
         {products.map((p) => (
-          <Card key={p.id} {...p} />
+          <Card
+            key={p.id}
+            product={p}
+            liked={likes.some((x) => x.id === p.id)}
+            onLike={onLike}
+            onAdd={onAdd}
+          />
         ))}
       </div>
     </section>
