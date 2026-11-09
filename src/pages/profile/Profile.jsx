@@ -43,7 +43,7 @@ export default function Profile({ cartCount = 0, likeCount = 0 }) {
       </div>
 
       {/* Menyu */}
-      <div className="mt-6 flex flex-col gap-2">
+      <div className="mt-5.5 flex flex-col gap-2">
         {menu.map(({ id, title, Icon }) => (
           <button
             key={id}
