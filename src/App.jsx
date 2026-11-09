@@ -36,7 +36,7 @@ export default function App() {
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item,
+            : item
         );
       }
       return [...prev, { ...product, quantity: 1 }];
@@ -65,12 +65,8 @@ export default function App() {
           path="/like"
           element={<Like likes={likes} onLike={toggleLike} onAdd={addToCart} />}
         />
-        <Route path="/profile" element={<Soon title="Profil" />} />
+        <Route path="/profile" element={<Profile/>} />
       </Routes>
-      <Route
-        path="/profile"
-        element={<Profile cartCount={cartCount} likeCount={likes.length} />}
-      />
       <BottomNav cartCount={cartCount} likeCount={likes.length} />
     </>
   );
