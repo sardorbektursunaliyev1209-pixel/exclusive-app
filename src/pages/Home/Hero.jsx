@@ -57,11 +57,9 @@ export default function Hero() {
       onTouchEnd={onTouchEnd}
       className={`relative mx-4 mt-4 min-h-[190px] overflow-hidden rounded-[24px] bg-gradient-to-br ${bg} p-5 text-white shadow-lg transition-all duration-500`}
     >
-      {/* Orqa fon yorug'liklari */}
       <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-white/15 blur-2xl" />
       <div className="pointer-events-none absolute -bottom-12 left-1/3 h-36 w-36 rounded-full bg-white/10 blur-2xl" />
 
-      {/* Matn */}
       <div
         key={i}
         className="relative z-10"
@@ -79,17 +77,13 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* O'ngdagi katta raqam kompozitsiyasi */}
       <div
         key={`s${i}`}
         className="pointer-events-none absolute right-4 top-1/2 z-10 grid h-[128px] w-[128px] -translate-y-1/2 place-items-center"
         style={{ animation: 'heroFadeUp 0.6s ease both' }}
       >
-        {/* Tashqi halqa */}
         <div className="absolute inset-0 rounded-full border border-dashed border-white/40 [animation:spin_18s_linear_infinite]" />
-        {/* Ichki shisha doira */}
         <div className="absolute inset-3 rounded-full border border-white/25 bg-white/10 shadow-[inset_0_0_24px_rgba(255,255,255,0.15)] backdrop-blur-sm" />
-        {/* Raqam */}
         <div className="relative text-center leading-none">
           <div className="text-[34px] font-black tracking-tight drop-shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
             {stat}
@@ -100,7 +94,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Progress indikator */}
       <div className="absolute bottom-3 left-5 z-10 flex gap-1.5">
         {slides.map((_, k) => (
           <button
