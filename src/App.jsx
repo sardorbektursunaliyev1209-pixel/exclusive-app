@@ -54,7 +54,8 @@ export default function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home onAdd={addToCart} likes={likes} onLike={toggleLike} />}
+          element={<Home onAdd={addToCart} likes={likes} onLike={toggleLike}   cartCount={cartCount}
+ />}
         />
         <Route path="/catalog" element={<Soon title="Katalog" />} />
         <Route

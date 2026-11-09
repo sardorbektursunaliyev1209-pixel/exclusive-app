@@ -4,12 +4,12 @@ import Hero from "./Hero";
 import Categories from "./Categories";
 import ProductGrid from "./ProductGrid";
 
-export default function Home({ onAdd, likes, onLike }) {
+export default function Home({ onAdd, likes, onLike ,cartCount}) {
   const [query, setQuery] = useState("");
 
   return (
     <div className="mx-auto max-w-[560px] pb-24">
-      <Navbar query={query} onQuery={setQuery} />
+      <Navbar query={query} onQuery={setQuery} cartCount={cartCount} />
       <Hero />
       <Categories />
       <ProductGrid onAdd={onAdd} likes={likes} onLike={onLike} />
