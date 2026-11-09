@@ -4,7 +4,7 @@ import BottomNav from "./components/BottomNav";
 import Home from "./pages/Home/Home";
 import Cart from "./pages/cart/Cart";
 import Like from "./pages/like/Like";
-
+import Profile from "./pages/profile/Profile";
 function Soon({ title }) {
   return (
     <div className="px-4 py-20 text-center text-xl text-[var(--hint)]">
@@ -36,7 +36,7 @@ export default function App() {
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
       return [...prev, { ...product, quantity: 1 }];
@@ -67,6 +67,10 @@ export default function App() {
         />
         <Route path="/profile" element={<Soon title="Profil" />} />
       </Routes>
+      <Route
+        path="/profile"
+        element={<Profile cartCount={cartCount} likeCount={likes.length} />}
+      />
       <BottomNav cartCount={cartCount} likeCount={likes.length} />
     </>
   );
