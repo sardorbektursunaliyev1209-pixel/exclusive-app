@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import BottomNav from "./components/BottomNav";
-import Home from "./pages/home/home";
+import Home from "./pages/Home/Home";
 import Cart from "./pages/cart/Cart";
 import Like from "./pages/like/Like";
 
