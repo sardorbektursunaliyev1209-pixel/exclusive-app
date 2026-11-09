@@ -1,15 +1,23 @@
 import { FaTrash } from "react-icons/fa";
+import PageHeader from "../../components/PageHeader";
 
 export default function Cart({ cart, onRemove }) {
   const total = cart.reduce((sum, x) => sum + x.price * x.quantity, 0);
 
   if (cart.length === 0) {
-    return <div className="px-4 py-24 text-center text-[var(--hint)]">Savat hozircha bo'sh</div>;
+    return (
+      <div className="mx-auto max-w-[560px] px-4 pb-24">
+        <PageHeader title="Savat" />
+        <div className="py-20 text-center text-[var(--hint)]">
+          Savat hozircha bo'sh
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="mx-auto max-w-[560px] px-4 pt-4 pb-44">
-      <h1 className="mb-4 text-xl font-bold">Savat</h1>
+    <div className="mx-auto max-w-[560px] px-4 pb-44">
+      <PageHeader title="Savat" />
 
       <div className="flex flex-col gap-3">
         {cart.map((x) => (
