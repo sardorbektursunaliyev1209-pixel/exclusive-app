@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import BottomNav from "./components/BottomNav";
 import Home from "./pages/Home/Home";
@@ -48,7 +48,12 @@ export default function App() {
   };
 
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
+useEffect(() => {
+  const tg = window.Telegram?.WebApp;
+  if (!tg) return;
+  tg.ready();
+  tg.expand();
+}, []);
   return (
     <>
       <Routes>
