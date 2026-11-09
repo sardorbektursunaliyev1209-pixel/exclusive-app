@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import BottomNav from "./components/BottomNav";
 import Home from "./pages/Home/Home";
-import Cart from "./pages/home/cart/Cart";
 import Like from "./pages/like/Like";
 import Profile from "./pages/profile/Profile";
+import Cart from "./pages/cart/Cart";
 function Soon({ title }) {
   return (
     <div className="px-4 py-20 text-center text-xl text-[var(--hint)]">
