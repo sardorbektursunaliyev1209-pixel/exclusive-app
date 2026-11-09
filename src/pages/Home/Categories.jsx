@@ -10,10 +10,9 @@ const categoryImages = {
   "Bolalar oyinchog'i": "/category-img/B-oyinchiqlar.png",
 };
 
-export default function Categories() {
+export default function Categories({ active, onSelect }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [active, setActive] = useState(null);
 
   useEffect(() => {
     getCategories()
@@ -41,7 +40,7 @@ export default function Categories() {
         {categories.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActive(item.id)}
+            onClick={() => onSelect(active === item.id ? null : item.id)}
             className={`w-[94px] shrink-0 rounded-2xl border bg-[var(--card)] px-1.5 py-3 text-center text-xs ${
               active === item.id ? "border-[var(--accent)]" : "border-transparent"
             }`}

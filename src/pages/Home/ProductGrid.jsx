@@ -22,19 +22,30 @@ const toCard = (p) => ({
   reviews: p.review_quantity || 0,
 });
 
-export default function ProductGrid({ onAdd, likes, onLike }) {
+export default function ProductGrid({ onAdd, likes = [], onLike, query = "" }) {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    Product().then((data) => setProducts(data.map(toCard)));
-  }, []);
+ useEffect(() => {
+  Product().then((data) => {
+    console.log("MAHSULOT:", data[0]);
+    setProducts(data.map(toCard));
+  });
+}, []);
+
+  // Qidiruv: nom kichik harfga o'tkazilib, query ni o'z ichiga olsa o'tadi
+  const q = query.trim().toLowerCase();
+  const filtered = products.filter((p) =>
+    (p.title || "").toLowerCase().includes(q),
+  );
 
   return (
     <section className="mt-5">
-      <h2 className="px-4 pb-2.5 text-lg font-bold">Bugungi takliflar</h2>
+      <h2 className="px-4 pb-2.5 text-lg font-bold">
+        {q ? "Qidiruv natijalari" : "Bugungi takliflar"}
+      </h2>
 
       <div className="grid grid-cols-2 gap-3 px-4">
-        {products.map((p) => (
+        {filtered.map((p) => (
           <Card
             key={p.id}
             product={p}
@@ -44,6 +55,12 @@ export default function ProductGrid({ onAdd, likes, onLike }) {
           />
         ))}
       </div>
+
+      {products.length > 0 && filtered.length === 0 && (
+        <p className="px-4 py-10 text-center text-[var(--hint)]">
+          Hech narsa topilmadi
+        </p>
+      )}
     </section>
   );
 }

@@ -36,7 +36,7 @@ export default function App() {
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
       return [...prev, { ...product, quantity: 1 }];
@@ -48,19 +48,25 @@ export default function App() {
   };
 
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-useEffect(() => {
-  const tg = window.Telegram?.WebApp;
-  if (!tg) return;
-  tg.ready();
-  tg.expand();
-}, []);
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+    tg.ready();
+    tg.expand();
+  }, []);
   return (
     <>
       <Routes>
         <Route
           path="/"
-          element={<Home onAdd={addToCart} likes={likes} onLike={toggleLike}   cartCount={cartCount}
- />}
+          element={
+            <Home
+              onAdd={addToCart}
+              likes={likes}
+              onLike={toggleLike}
+              cartCount={cartCount}
+            />
+          }
         />
         <Route path="/catalog" element={<Soon title="Katalog" />} />
         <Route
@@ -71,7 +77,7 @@ useEffect(() => {
           path="/like"
           element={<Like likes={likes} onLike={toggleLike} onAdd={addToCart} />}
         />
-        <Route path="/profile" element={<Profile/>} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <BottomNav cartCount={cartCount} likeCount={likes.length} />
     </>
