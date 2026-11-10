@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import Like from "./pages/like/Like";
 import Profile from "./pages/profile/Profile";
 import Cart from "./pages/cart/Cart";
+
 function Soon({ title }) {
   return (
     <div className="px-4 py-20 text-center text-xl text-[var(--hint)]">
@@ -17,14 +18,22 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [likes, setLikes] = useState([]);
 
+  const decreaseQty = (id) => {
+    setCart((prev) =>
+      prev
+        .map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+        )
+        .filter((item) => item.quantity > 0),
+    );
+  };
+
   const toggleLike = (product) => {
     setLikes((prev) => {
       const exists = prev.some((item) => item.id === product.id);
       if (exists) {
-        // bor bo'lsa olib tashlaymiz
         return prev.filter((item) => item.id !== product.id);
       }
-      // yo'q bo'lsa qo'shamiz
       return [...prev, product];
     });
   };
@@ -48,12 +57,15 @@ export default function App() {
   };
 
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const likeCount = likes.length;
+
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
     tg.ready();
     tg.expand();
   }, []);
+
   return (
     <>
       <Routes>
@@ -65,6 +77,8 @@ export default function App() {
               likes={likes}
               onLike={toggleLike}
               cartCount={cartCount}
+              decreaseQty={decreaseQty}
+              cart={cart}
             />
           }
         />
@@ -77,9 +91,12 @@ export default function App() {
           path="/like"
           element={<Like likes={likes} onLike={toggleLike} onAdd={addToCart} />}
         />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={<Profile cartCount={cartCount} likeCount={likeCount} />}
+        />
       </Routes>
-      <BottomNav cartCount={cartCount} likeCount={likes.length} />
+      <BottomNav cartCount={cartCount} likeCount={likeCount} />
     </>
   );
 }

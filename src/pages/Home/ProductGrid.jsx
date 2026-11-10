@@ -11,7 +11,6 @@ const getImg = (pictures) => {
   return pic.startsWith("http") ? pic : baseUrl + pic;
 };
 
-// Backend maydonlarini kartaga mos shaklga o'tkazadi
 const toCard = (p) => ({
   id: p.id,
   title: p.title,
@@ -22,17 +21,20 @@ const toCard = (p) => ({
   reviews: p.review_quantity || 0,
 });
 
-export default function ProductGrid({ onAdd, likes = [], onLike, query = "" }) {
+export default function ProductGrid({
+  onAdd,
+  cart = [],
+  decreaseQty,
+  likes = [],
+  onLike,
+  query = "",
+}) {
   const [products, setProducts] = useState([]);
 
- useEffect(() => {
-  Product().then((data) => {
-    console.log("MAHSULOT:", data[0]);
-    setProducts(data.map(toCard));
-  });
-}, []);
+  useEffect(() => {
+    Product().then((data) => setProducts(data.map(toCard)));
+  }, []);
 
-  // Qidiruv: nom kichik harfga o'tkazilib, query ni o'z ichiga olsa o'tadi
   const q = query.trim().toLowerCase();
   const filtered = products.filter((p) =>
     (p.title || "").toLowerCase().includes(q),
@@ -49,9 +51,11 @@ export default function ProductGrid({ onAdd, likes = [], onLike, query = "" }) {
           <Card
             key={p.id}
             product={p}
+            qty={cart.find((x) => x.id === p.id)?.quantity || 0}
             liked={likes.some((x) => x.id === p.id)}
             onLike={onLike}
             onAdd={onAdd}
+            decreaseQty={decreaseQty}
           />
         ))}
       </div>

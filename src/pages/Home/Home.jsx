@@ -4,7 +4,7 @@ import Hero from "./Hero";
 import Categories from "./Categories";
 import ProductGrid from "./ProductGrid";
 
-export default function Home({ onAdd, likes = [], onLike, cartCount = 0 }) {
+export default function Home({ onAdd, likes = [],cart=[], onLike, cartCount = 0 , decreaseQty}) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(null);     
 
@@ -20,10 +20,12 @@ export default function Home({ onAdd, likes = [], onLike, cartCount = 0 }) {
       <Categories active={category} onSelect={setCategory} />
       <ProductGrid
         onAdd={onAdd}
+        decreaseQty={decreaseQty}
         likes={likes}
         onLike={onLike}
         query={query}
         category={category}
+        cart={cart}
       />
     </div>
   );

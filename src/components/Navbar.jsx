@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch, FaRegHeart, FaShoppingCart, FaTimes } from 'react-icons/fa';
 import { useTelegram } from '../hooks/useTelegram';
+import { CiDark } from 'react-icons/ci';
 
 function IconButton({ label, count = 0, onClick, children }) {
   return (
@@ -34,7 +35,8 @@ export default function Navbar({ query, onQuery, cartCount = 0, likeCount = 0 })
     <header className="sticky top-0 z-40 rounded-b-[24px] bg-[var(--card)]/90 px-4 pb-3 pt-3.5 shadow-[0_6px_24px_rgba(0,0,0,0.06)] backdrop-blur-md">
       <div className="flex items-center gap-3">
         {/* Avatar */}
-        <div className="rounded-full bg-gradient-to-br from-[#db4444] to-[#ff8a5c] p-[2px]">
+    
+        <Link to={"/profile"} className="rounded-full bg-gradient-to-br from-[#db4444] to-[#ff8a5c] p-[2px]">
           <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-[var(--card)] bg-gradient-to-br from-[#db4444] to-[#ff8a5c] text-lg font-bold text-white">
             {photo ? (
               <img src={photo} alt="" className="h-full w-full object-cover" />
@@ -42,7 +44,7 @@ export default function Navbar({ query, onQuery, cartCount = 0, likeCount = 0 })
               displayName.charAt(0).toUpperCase()
             )}
           </div>
-        </div>
+        </Link>
 
         {/* Salomlashish */}
         <div className="min-w-0 flex-1 leading-tight">
@@ -51,11 +53,9 @@ export default function Navbar({ query, onQuery, cartCount = 0, likeCount = 0 })
         </div>
 
         {/* Tugmalar */}
-        <IconButton label="Sevimlilar" count={likeCount} onClick={() => go('/like')}>
-          <FaRegHeart size={18} />
-        </IconButton>
-        <IconButton label="Savat" count={cartCount} onClick={() => go('/cart')}>
-          <FaShoppingCart size={18} />
+       
+        <IconButton >
+<CiDark size={28} />
         </IconButton>
       </div>
 

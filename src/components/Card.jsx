@@ -1,26 +1,39 @@
-import { useState } from "react";
 import { FaHeart, FaRegHeart, FaStar, FaImage } from "react-icons/fa";
 import { useTelegram } from "../hooks/useTelegram";
 
-export default function Card({ product, liked, onLike, onAdd }) {
-  const { id, title, img, price, oldPrice, rating, reviews } = product;
-  const [added, setAdded] = useState(false);
+export default function Card({
+  product,
+  qty = 0,
+  liked,
+  onLike,
+  onAdd,
+  decreaseQty,
+}) {
+  const { title, img, price, oldPrice, rating, reviews } = product;
   const { haptic } = useTelegram();
 
   const discount = oldPrice ? Math.round((1 - price / oldPrice) * 100) : 0;
 
   const handleAdd = () => {
     onAdd(product);
-    haptic();
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1400);
+    haptic?.();
+  };
+
+  const handleDecrease = () => {
+    decreaseQty(product.id);
+    haptic?.();
   };
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-[var(--card)]">
       <div className="relative m-2 flex h-[130px] items-center justify-center rounded-xl bg-[var(--bg)]">
         {img ? (
-          <img src={img} alt={title} loading="lazy" className="max-h-[80%] max-w-[80%] object-contain" />
+          <img
+            src={img}
+            alt={title}
+            loading="lazy"
+            className="max-h-[80%] max-w-[80%] object-contain"
+          />
         ) : (
           <FaImage size={36} className="text-[var(--hint)] opacity-50" />
         )}
@@ -32,11 +45,18 @@ export default function Card({ product, liked, onLike, onAdd }) {
         )}
 
         <button
-          onClick={() => { onLike(product); haptic(); }}
+          onClick={() => {
+            onLike(product);
+            haptic?.();
+          }}
           className="absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full bg-[var(--card)]"
           aria-label="Sevimli"
         >
-          {liked ? <FaHeart size={15} className="text-red-600" /> : <FaRegHeart size={15} />}
+          {liked ? (
+            <FaHeart size={15} className="text-red-600" />
+          ) : (
+            <FaRegHeart size={15} />
+          )}
         </button>
       </div>
 
@@ -45,7 +65,10 @@ export default function Card({ product, liked, onLike, onAdd }) {
 
         <div className="flex items-center gap-0.5 text-xs">
           {[1, 2, 3, 4, 5].map((n) => (
-            <FaStar key={n} className={n <= rating ? "text-yellow-500" : "text-gray-400/50"} />
+            <FaStar
+              key={n}
+              className={n <= rating ? "text-yellow-500" : "text-gray-400/50"}
+            />
           ))}
           <span className="ml-1 text-[var(--hint)]">({reviews})</span>
         </div>
@@ -53,16 +76,38 @@ export default function Card({ product, liked, onLike, onAdd }) {
         <div className="text-[15px] font-extrabold">
           ${price}
           {oldPrice && (
-            <span className="ml-1.5 text-xs font-normal text-[var(--hint)] line-through">${oldPrice}</span>
+            <span className="ml-1.5 text-xs font-normal text-[var(--hint)] line-through">
+              ${oldPrice}
+            </span>
           )}
         </div>
 
-        <button
-          onClick={handleAdd}
-          className={`mt-auto rounded-xl py-2.5 text-sm font-bold text-white ${added ? "bg-green-600" : "bg-black"}`}
-        >
-          {added ? "Qo'shildi" : "Savatga qo'shish"}
-        </button>
+        {qty === 0 ? (
+          <button
+            onClick={handleAdd}
+            className="mt-auto rounded-xl bg-[var(--btn,#000)] py-2.5 text-sm font-bold text-[var(--btn-text,#fff)] transition-transform active:scale-[0.97]"
+          >
+            Savatga qo'shish
+          </button>
+        ) : (
+          <div className="mt-auto flex items-center justify-between rounded-xl bg-[var(--btn,#000)] text-[var(--btn-text,#fff)]">
+            <button
+              onClick={handleDecrease}
+              aria-label="Kamaytirish"
+              className="grid h-10 w-12 place-items-center text-lg font-bold active:scale-90"
+            >
+              −
+            </button>
+            <span className="text-sm font-bold">{qty}</span>
+            <button
+              onClick={handleAdd}
+              aria-label="Ko'paytirish"
+              className="grid h-10 w-12 place-items-center text-lg font-bold active:scale-90"
+            >
+              +
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
