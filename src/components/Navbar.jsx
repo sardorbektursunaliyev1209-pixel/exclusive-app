@@ -1,43 +1,24 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaRegHeart, FaShoppingCart, FaTimes } from 'react-icons/fa';
-import { useTelegram } from '../hooks/useTelegram';
-import { CiDark } from 'react-icons/ci';
+import { Link } from "react-router-dom";
+import { FaSearch, FaTimes, FaMapMarkerAlt, FaChevronDown } from "react-icons/fa";
+import { useTelegram } from "../hooks/useTelegram";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
-function IconButton({ label, count = 0, onClick, children }) {
-  return (
-    <button
-      onClick={onClick}
-      aria-label={label}
-      className="relative grid h-[42px] w-[42px] place-items-center rounded-[14px] bg-[var(--bg)] transition-transform active:scale-90"
-    >
-      {children}
-      {count > 0 && (
-        <span className="absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-red-600 px-1 text-[10px] font-bold leading-none text-white ring-2 ring-[var(--card)]">
-          {count > 99 ? '99+' : count}
-        </span>
-      )}
-    </button>
-  );
-}
-
-export default function Navbar({ query, onQuery, cartCount = 0, likeCount = 0 }) {
+export default function Navbar({ query, onQuery }) {
   const { name, photo, haptic } = useTelegram();
-  const navigate = useNavigate();
+  const [profile] = useLocalStorage("profile", { name: "", phone: "", city: "" });
 
-  const go = (path) => {
-    haptic?.();
-    navigate(path);
-  };
-
-  const displayName = name || 'Mehmon';
+  const displayName = profile.name || name || "Mehmon";
 
   return (
-    <header className="sticky top-0 z-40 rounded-b-[24px] bg-[var(--card)]/90 px-4 pb-3 pt-3.5 shadow-[0_6px_24px_rgba(0,0,0,0.06)] backdrop-blur-md">
+    <header className="sticky top-0 z-40 rounded-b-[28px] bg-[var(--card)]/90 px-4 pb-4 pt-3.5 shadow-[0_8px_28px_rgba(0,0,0,0.07)] backdrop-blur-md">
       <div className="flex items-center gap-3">
         {/* Avatar */}
-    
-        <Link to={"/profile"} className="rounded-full bg-gradient-to-br from-[#db4444] to-[#ff8a5c] p-[2px]">
-          <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-[var(--card)] bg-gradient-to-br from-[#db4444] to-[#ff8a5c] text-lg font-bold text-white">
+        <Link
+          to="/profile"
+          onClick={() => haptic?.()}
+          className="rounded-full bg-gradient-to-br from-[#db4444] to-[#ff8a5c] p-[2px] transition-transform active:scale-95"
+        >
+          <div className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-[var(--card)] bg-gradient-to-br from-[#db4444] to-[#ff8a5c] text-lg font-bold text-white">
             {photo ? (
               <img src={photo} alt="" className="h-full w-full object-cover" />
             ) : (
@@ -52,16 +33,23 @@ export default function Navbar({ query, onQuery, cartCount = 0, likeCount = 0 })
           <b className="block truncate text-[17px]">{displayName}</b>
         </div>
 
-        {/* Tugmalar */}
-       
-        <IconButton >
-<CiDark size={28} />
-        </IconButton>
+        {/* Shahar tugmasi */}
+        <Link
+          to="/profile"
+          onClick={() => haptic?.()}
+          className="flex max-w-[140px] items-center gap-1.5 rounded-full bg-[var(--bg)] py-2 pl-2.5 pr-3 text-[13px] font-medium transition-transform active:scale-95"
+        >
+          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--accent)]/15 text-[var(--accent)]">
+            <FaMapMarkerAlt size={11} />
+          </span>
+          <span className="truncate">{profile.city || "Shahar tanlang"}</span>
+          <FaChevronDown size={9} className="shrink-0 text-[var(--hint)]" />
+        </Link>
       </div>
 
       {/* Qidiruv */}
-      <label className="mt-3 flex h-11 items-center gap-2.5 rounded-[14px] bg-[var(--bg)] px-3.5 text-[var(--hint)] ring-2 ring-transparent transition-all focus-within:bg-[var(--card)] focus-within:ring-[var(--accent)]/40">
-        <FaSearch size={14} />
+      <label className="mt-3.5 flex h-12 items-center gap-3 rounded-2xl bg-[var(--bg)] px-4 text-[var(--hint)] ring-2 ring-transparent transition-all focus-within:bg-[var(--card)] focus-within:ring-[var(--accent)]/40">
+        <FaSearch size={15} />
         <input
           value={query}
           onChange={(e) => onQuery(e.target.value)}
@@ -71,9 +59,9 @@ export default function Navbar({ query, onQuery, cartCount = 0, likeCount = 0 })
         {query && (
           <button
             type="button"
-            onClick={() => onQuery('')}
+            onClick={() => onQuery("")}
             aria-label="Tozalash"
-            className="grid h-5 w-5 place-items-center rounded-full bg-[var(--hint)]/30 text-[var(--text)]"
+            className="grid h-6 w-6 place-items-center rounded-full bg-[var(--hint)]/25 text-[var(--text)]"
           >
             <FaTimes size={10} />
           </button>
@@ -81,4 +69,4 @@ export default function Navbar({ query, onQuery, cartCount = 0, likeCount = 0 })
       </label>
     </header>
   );
-}
+} 

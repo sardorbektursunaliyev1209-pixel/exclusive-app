@@ -47,7 +47,7 @@ export default function ProductGrid({
       </h2>
 
       <div className="grid grid-cols-2 gap-3 px-4">
-        {filtered.map((p) => (
+        {filtered.slice(0,6).map((p) => (
           <Card
             key={p.id}
             product={p}
