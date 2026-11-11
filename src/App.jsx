@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import BottomNav from "./components/BottomNav";
 import Home from "./pages/Home/Home";
 import Like from "./pages/like/Like";
@@ -7,6 +7,7 @@ import Profile from "./pages/profile/Profile";
 import Cart from "./pages/cart/Cart";
 
 function Soon({ title }) {
+
   return (
     <div className="px-4 py-20 text-center text-xl text-[var(--hint)]">
       {title} (tez orada)
@@ -17,7 +18,24 @@ function Soon({ title }) {
 export default function App() {
   const [cart, setCart] = useState([]);
   const [likes, setLikes] = useState([]);
+const { pathname } = useLocation();
+const navigate = useNavigate();
 
+useEffect(() => {
+  const back = window.Telegram?.WebApp?.BackButton;
+  if (!back) return;
+
+  if (pathname === "/") {
+    back.hide();
+    return;
+  }
+
+  const goBack = () => navigate(-1);
+  back.show();
+  back.onClick(goBack);
+
+  return () => back.offClick(goBack);
+}, [pathname, navigate]);
   const decreaseQty = (id) => {
     setCart((prev) =>
       prev
