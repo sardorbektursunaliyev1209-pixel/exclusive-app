@@ -30,9 +30,13 @@ export default function ProductGrid({
   query = "",
 }) {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Product().then((data) => setProducts(data.map(toCard)));
+    Product()
+      .then((data) => setProducts(data.map(toCard)))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   }, []);
 
   const q = query.trim().toLowerCase();
@@ -47,7 +51,15 @@ export default function ProductGrid({
       </h2>
 
       <div className="grid grid-cols-2 gap-3 px-4">
-        {filtered.slice(0,6).map((p) => (
+        {loading &&
+          Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-[290px] animate-pulse rounded-2xl bg-[var(--hint)]/15"
+            />
+          ))}
+
+        {filtered.map((p) => (
           <Card
             key={p.id}
             product={p}
@@ -60,7 +72,7 @@ export default function ProductGrid({
         ))}
       </div>
 
-      {products.length > 0 && filtered.length === 0 && (
+      {!loading && products.length > 0 && filtered.length === 0 && (
         <p className="px-4 py-10 text-center text-[var(--hint)]">
           Hech narsa topilmadi
         </p>

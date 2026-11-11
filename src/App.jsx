@@ -5,9 +5,8 @@ import Home from "./pages/Home/Home";
 import Like from "./pages/like/Like";
 import Profile from "./pages/profile/Profile";
 import Cart from "./pages/cart/Cart";
-
+import { useLocalStorage } from "./hooks/useLocalStorage";
 function Soon({ title }) {
-
   return (
     <div className="px-4 py-20 text-center text-xl text-[var(--hint)]">
       {title} (tez orada)
@@ -16,26 +15,26 @@ function Soon({ title }) {
 }
 
 export default function App() {
-  const [cart, setCart] = useState([]);
-  const [likes, setLikes] = useState([]);
-const { pathname } = useLocation();
-const navigate = useNavigate();
+  const [cart, setCart] = useLocalStorage("cart", []);
+  const [likes, setLikes] = useLocalStorage("likes", []);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-useEffect(() => {
-  const back = window.Telegram?.WebApp?.BackButton;
-  if (!back) return;
+  useEffect(() => {
+    const back = window.Telegram?.WebApp?.BackButton;
+    if (!back) return;
 
-  if (pathname === "/") {
-    back.hide();
-    return;
-  }
+    if (pathname === "/") {
+      back.hide();
+      return;
+    }
 
-  const goBack = () => navigate(-1);
-  back.show();
-  back.onClick(goBack);
+    const goBack = () => navigate(-1);
+    back.show();
+    back.onClick(goBack);
 
-  return () => back.offClick(goBack);
-}, [pathname, navigate]);
+    return () => back.offClick(goBack);
+  }, [pathname, navigate]);
   const decreaseQty = (id) => {
     setCart((prev) =>
       prev
@@ -73,7 +72,7 @@ useEffect(() => {
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
-
+  const clearCart = () => setCart([]);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const likeCount = likes.length;
 
@@ -103,7 +102,9 @@ useEffect(() => {
         <Route path="/catalog" element={<Soon title="Katalog" />} />
         <Route
           path="/cart"
-          element={<Cart cart={cart} onRemove={removeFromCart} />}
+          element={
+            <Cart cart={cart} onRemove={removeFromCart} onClear={clearCart} />
+          }
         />
         <Route
           path="/like"
