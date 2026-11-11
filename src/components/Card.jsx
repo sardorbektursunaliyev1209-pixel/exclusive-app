@@ -1,5 +1,6 @@
 import { FaHeart, FaRegHeart, FaStar, FaImage } from "react-icons/fa";
 import { useTelegram } from "../hooks/useTelegram";
+import { useNavigate } from "react-router-dom";
 
 export default function Card({
   product,
@@ -11,7 +12,7 @@ export default function Card({
 }) {
   const { title, img, price, oldPrice, rating, reviews } = product;
   const { haptic } = useTelegram();
-
+  const navigate = useNavigate();
   const discount = oldPrice ? Math.round((1 - price / oldPrice) * 100) : 0;
 
   const handleAdd = () => {
@@ -26,7 +27,12 @@ export default function Card({
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-[var(--card)]">
-      <div className="relative m-2 flex h-[130px] items-center justify-center rounded-xl bg-[var(--bg)]">
+      <div
+        onClick={() => {
+          navigate(`/product/${product.id}`);
+        }}
+        className="relative m-2 flex h-[130px] cursor-pointer items-center justify-center rounded-xl bg-[var(--bg)]"
+      >
         {img ? (
           <img
             src={img}
@@ -45,7 +51,8 @@ export default function Card({
         )}
 
         <button
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             onLike(product);
             haptic?.();
           }}
@@ -61,7 +68,12 @@ export default function Card({
       </div>
 
       <div className="flex flex-1 flex-col gap-1 px-3 pb-3">
-        <h2 className="line-clamp-2 h-9 text-sm leading-tight">{title}</h2>
+        <h2
+          onClick={() => navigate(`/product/${product.id}`)}
+          className="line-clamp-2 h-9 cursor-pointer text-sm leading-tight"
+        >
+          {title}
+        </h2>
 
         <div className="flex items-center gap-0.5 text-xs">
           {[1, 2, 3, 4, 5].map((n) => (

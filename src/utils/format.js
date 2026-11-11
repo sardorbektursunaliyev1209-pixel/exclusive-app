@@ -1,0 +1,1 @@
+export const money = (n) => Number(n).toLocaleString("ru-RU") + " so'm";

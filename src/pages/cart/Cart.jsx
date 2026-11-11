@@ -45,7 +45,7 @@ export default function Cart({ cart, onRemove, onClear }) {
       notify("Buyurtmangiz qabul qilindi ✓");
     } catch (e) {
       console.error(e);
-      notify("Xatolik bo'ldi, qayta urinib ko'ring");
+      notify("Xato: " + e.message + " | " + API_URL);
     } finally {
       setSending(false);
     }
@@ -84,8 +84,12 @@ export default function Cart({ cart, onRemove, onClear }) {
 
             <div className="min-w-0 flex-1">
               <h2 className="line-clamp-2 text-sm leading-tight">{x.title}</h2>
-              <b className="text-[15px]">${(x.price * x.quantity).toFixed(2)}</b>
-              <div className="text-xs text-[var(--hint)]">Soni: {x.quantity}</div>
+              <b className="text-[15px]">
+                ${(x.price * x.quantity).toFixed(2)}
+              </b>
+              <div className="text-xs text-[var(--hint)]">
+                Soni: {x.quantity}
+              </div>
             </div>
 
             <button
