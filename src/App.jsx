@@ -22,14 +22,25 @@ export default function App() {
   const [likes, setLikes] = useLocalStorage("likes", []);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
+
     tg.ready();
     tg.expand();
+
+    if (tg.isVersionAtLeast?.("7.7")) tg.disableVerticalSwipes();
+
+    if (tg.isVersionAtLeast?.("8.0")) {
+      tg.requestFullscreen?.();
+    }
+
+    if (tg.isVersionAtLeast?.("6.1")) {
+      tg.setBackgroundColor?.(getComputedStyle(document.body).backgroundColor);
+    }
   }, []);
 
+  // Telegram BackButton
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
     const back = tg?.BackButton;
