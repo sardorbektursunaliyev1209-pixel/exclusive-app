@@ -6,8 +6,8 @@ import Like from "./pages/like/Like";
 import Profile from "./pages/profile/Profile";
 import Cart from "./pages/cart/Cart";
 import ProductDetail from "./pages/product/ProductDetail";
-import SearchPage from "./pages/search/SearchPage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import SearchPage from "./pages/search/searchPage";
 
 function Soon({ title }) {
   return (
