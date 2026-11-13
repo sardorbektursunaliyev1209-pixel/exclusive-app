@@ -7,6 +7,7 @@ import Profile from "./pages/profile/Profile";
 import Cart from "./pages/cart/Cart";
 import ProductDetail from "./pages/product/ProductDetail";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { Search } from "./pages/search/Search";
 
 function Soon({ title }) {
   return (
@@ -138,6 +139,8 @@ export default function App() {
           path="/profile"
           element={<Profile cartCount={cartCount} likeCount={likeCount} />}
         />
+
+        <Route path="/search" element={<Search />} />
       </Routes>
 
       <BottomNav cartCount={cartCount} likeCount={likeCount} />

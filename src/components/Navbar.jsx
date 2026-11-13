@@ -1,14 +1,22 @@
-import { Link } from "react-router-dom";
-import { FaSearch, FaTimes, FaMapMarkerAlt, FaChevronDown } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaSearch,
+  FaTimes,
+  FaMapMarkerAlt,
+  FaChevronDown,
+} from "react-icons/fa";
 import { useTelegram } from "../hooks/useTelegram";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export default function Navbar({ query, onQuery }) {
   const { name, photo, haptic } = useTelegram();
-  const [profile] = useLocalStorage("profile", { name: "", phone: "", city: "" });
-
+  const navigate = useNavigate();
+  const [profile] = useLocalStorage("profile", {
+    name: "",
+    phone: "",
+    city: "",
+  });
   const displayName = profile.name || name || "Mehmon";
-
   return (
     <header className="sticky top-0 z-40 rounded-b-[28px] bg-[var(--card)]/90 px-4 pb-4 pt-3.5 shadow-[0_8px_28px_rgba(0,0,0,0.07)] backdrop-blur-md">
       <div className="flex items-center gap-3">
@@ -29,7 +37,9 @@ export default function Navbar({ query, onQuery }) {
 
         {/* Salomlashish */}
         <div className="min-w-0 flex-1 leading-tight">
-          <small className="text-[12px] text-[var(--hint)]">Xush kelibsiz 👋</small>
+          <small className="text-[12px] text-[var(--hint)]">
+            Xush kelibsiz 👋
+          </small>
           <b className="block truncate text-[17px]">{displayName}</b>
         </div>
 
@@ -51,6 +61,9 @@ export default function Navbar({ query, onQuery }) {
       <label className="mt-3.5 flex h-12 items-center gap-3 rounded-2xl bg-[var(--bg)] px-4 text-[var(--hint)] ring-2 ring-transparent transition-all focus-within:bg-[var(--card)] focus-within:ring-[var(--accent)]/40">
         <FaSearch size={15} />
         <input
+          onClick={() => {
+            navigate("/search");
+          }}
           value={query}
           onChange={(e) => onQuery(e.target.value)}
           placeholder="Nima izlayapsiz?"
@@ -69,4 +82,4 @@ export default function Navbar({ query, onQuery }) {
       </label>
     </header>
   );
-} 
+}

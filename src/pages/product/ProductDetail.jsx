@@ -210,7 +210,6 @@ export default function ProductDetail({
         </div>
       </div>
 
-      {/* Qulayliklar */}
       <div className="mt-3  grid grid-cols-3 gap-2 text-center text-[11px]">
         {[
           [<FaTruck color="red" />, "Tez yetkazish"],
