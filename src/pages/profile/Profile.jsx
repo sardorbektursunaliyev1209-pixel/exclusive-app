@@ -52,11 +52,9 @@ export default function Profile({ cartCount = 0, likeCount = 0 }) {
   const [sheet, setSheet] = useState(null); // 'edit' | 'address' | 'help' | null
   const [toast, setToast] = useState("");
 
-  // Tahrirlash formasi
   const [draft, setDraft] = useState(profile);
   const [errors, setErrors] = useState({});
 
-  // Manzil formasi
   const [tag, setTag] = useState("Uy");
   const [addrText, setAddrText] = useState("");
 
@@ -141,7 +139,10 @@ export default function Profile({ cartCount = 0, likeCount = 0 }) {
   ];
 
   return (
-    <div className="mx-auto max-w-[560px] px-4 pb-28 pt-6">
+    <div
+      style={{ paddingTop: "calc(var(--safe-top) + 1.5rem)" }}
+      className="mx-auto max-w-[560px] px-4 pb-28"
+    >
       {/* Yuqori karta */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#6d28d9] p-5 text-white shadow-lg">
         <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl" />

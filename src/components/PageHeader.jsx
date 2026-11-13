@@ -5,16 +5,22 @@ import { useTelegram } from "../hooks/useTelegram";
 export default function PageHeader({ title, right }) {
   const navigate = useNavigate();
   const { haptic } = useTelegram();
-  const hasTgBack = !!window.Telegram?.WebApp?.initData;
+
+  // Telegram'ning o'z orqaga tugmasi ishlaydigan bo'lsa, bu yerdagisi kerak emas
+  const tg = window.Telegram?.WebApp;
+  const hasTgBack = !!tg?.initData && !!tg?.isVersionAtLeast?.("6.1");
+
   const goBack = () => {
     haptic?.();
-    // oldingi sahifa bo'lmasa (to'g'ridan-to'g'ri ochilgan bo'lsa), bosh sahifaga
     if (window.history.length > 1) navigate(-1);
     else navigate("/");
   };
 
   return (
-    <div className="sticky top-0 z-30 -mx-4 mb-3 flex items-center gap-3 bg-[var(--bg)]/90 px-4 py-3 backdrop-blur-md">
+    <div
+      style={{ paddingTop: "calc(var(--safe-top) + 0.75rem)" }}
+      className="sticky top-0 z-30 -mx-4 mb-3 flex items-center gap-3 bg-[var(--bg)]/90 px-4 pb-3 backdrop-blur-md"
+    >
       {!hasTgBack && (
         <button
           onClick={goBack}
