@@ -9,7 +9,7 @@ export default function Home({ onAdd, likes = [],cart=[], onLike, cartCount = 0 
   const [category, setCategory] = useState(null);     
 
   return (
-    <div className="mx-auto max-w-[560px] pb-24 mt-4">
+    <div className="mx-auto max-w-[560px] pb-24 mt-[60px]">
       <Navbar
         query={query}
         onQuery={setQuery}
