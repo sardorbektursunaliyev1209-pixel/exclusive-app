@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaSearch,
   FaTimes,
@@ -8,19 +8,21 @@ import {
 import { useTelegram } from "../hooks/useTelegram";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-export default function Navbar({ query, onQuery }) {
+export default function Navbar({ query, onQuery, autoFocus = false }) {
   const { name, photo, haptic } = useTelegram();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [profile] = useLocalStorage("profile", {
     name: "",
     phone: "",
     city: "",
   });
+
   const displayName = profile.name || name || "Mehmon";
+
   return (
     <header className="sticky top-0 z-40 rounded-b-[28px] bg-[var(--card)]/90 px-4 pb-4 pt-3.5 shadow-[0_8px_28px_rgba(0,0,0,0.07)] backdrop-blur-md">
       <div className="flex items-center gap-3">
-        {/* Avatar */}
         <Link
           to="/profile"
           onClick={() => haptic?.()}
@@ -35,7 +37,6 @@ export default function Navbar({ query, onQuery }) {
           </div>
         </Link>
 
-        {/* Salomlashish */}
         <div className="min-w-0 flex-1 leading-tight">
           <small className="text-[12px] text-[var(--hint)]">
             Xush kelibsiz 👋
@@ -43,7 +44,6 @@ export default function Navbar({ query, onQuery }) {
           <b className="block truncate text-[17px]">{displayName}</b>
         </div>
 
-        {/* Shahar tugmasi */}
         <Link
           to="/profile"
           onClick={() => haptic?.()}
@@ -57,22 +57,23 @@ export default function Navbar({ query, onQuery }) {
         </Link>
       </div>
 
-      {/* Qidiruv */}
       <label className="mt-3.5 flex h-12 items-center gap-3 rounded-2xl bg-[var(--bg)] px-4 text-[var(--hint)] ring-2 ring-transparent transition-all focus-within:bg-[var(--card)] focus-within:ring-[var(--accent)]/40">
         <FaSearch size={15} />
         <input
+          autoFocus={autoFocus}
+          readOnly={!onQuery}
           onClick={() => {
-            navigate("/search");
+            if (pathname !== "/search") navigate("/search");
           }}
-          value={query}
-          onChange={(e) => onQuery(e.target.value)}
+          value={query ?? ""}
+          onChange={(e) => onQuery?.(e.target.value)}
           placeholder="Nima izlayapsiz?"
           className="min-w-0 flex-1 bg-transparent text-[15px] text-[var(--text)] outline-none placeholder:text-[var(--hint)]"
         />
         {query && (
           <button
             type="button"
-            onClick={() => onQuery("")}
+            onClick={() => onQuery?.("")}
             aria-label="Tozalash"
             className="grid h-6 w-6 place-items-center rounded-full bg-[var(--hint)]/25 text-[var(--text)]"
           >

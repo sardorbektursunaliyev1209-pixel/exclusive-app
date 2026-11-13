@@ -6,8 +6,8 @@ import Like from "./pages/like/Like";
 import Profile from "./pages/profile/Profile";
 import Cart from "./pages/cart/Cart";
 import ProductDetail from "./pages/product/ProductDetail";
+import SearchPage from "./pages/search/SearchPage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
-import { Search } from "./pages/search/Search";
 
 function Soon({ title }) {
   return (
@@ -23,7 +23,6 @@ export default function App() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  // Telegram tayyor bo'lishi
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
@@ -31,10 +30,10 @@ export default function App() {
     tg.expand();
   }, []);
 
-  // Telegram BackButton
   useEffect(() => {
-    const back = window.Telegram?.WebApp?.BackButton;
-    if (!back) return;
+    const tg = window.Telegram?.WebApp;
+    const back = tg?.BackButton;
+    if (!back || !tg.isVersionAtLeast?.("6.1")) return;
 
     if (pathname === "/") {
       back.hide();
@@ -81,9 +80,7 @@ export default function App() {
   const toggleLike = (product) => {
     setLikes((prev) => {
       const exists = prev.some((item) => item.id === product.id);
-      if (exists) {
-        return prev.filter((item) => item.id !== product.id);
-      }
+      if (exists) return prev.filter((item) => item.id !== product.id);
       return [...prev, product];
     });
   };
@@ -101,9 +98,21 @@ export default function App() {
               onAdd={addToCart}
               likes={likes}
               onLike={toggleLike}
-              cartCount={cartCount}
               decreaseQty={decreaseQty}
               cart={cart}
+            />
+          }
+        />
+
+        <Route
+          path="/search"
+          element={
+            <SearchPage
+              cart={cart}
+              likes={likes}
+              onAdd={addToCart}
+              onLike={toggleLike}
+              decreaseQty={decreaseQty}
             />
           }
         />
@@ -139,8 +148,6 @@ export default function App() {
           path="/profile"
           element={<Profile cartCount={cartCount} likeCount={likeCount} />}
         />
-
-        <Route path="/search" element={<Search />} />
       </Routes>
 
       <BottomNav cartCount={cartCount} likeCount={likeCount} />
