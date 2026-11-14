@@ -7,7 +7,7 @@ import Cart from "./pages/cart/Cart";
 import ProductDetail from "./pages/product/ProductDetail";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import SearchPage from "./pages/search/SearchPage";
-import Home from "./pages/home/home";
+import Home from "./pages/Home/Home";
 
 function Soon({ title }) {
   return (
@@ -29,7 +29,6 @@ export default function App() {
     tg.ready();
     tg.expand();
 
-    // Agar Telegramda fullscreen rejimida qolgan bo'lsa, undan chiqish
     if (tg.isFullscreen) {
       tg.exitFullscreen?.();
     }

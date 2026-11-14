@@ -40,9 +40,11 @@ Quyidagi fayllardagi fullscreen moslamalari va ularning asoratlari to'liq olib t
 ### 1) `src/App.jsx`
 - ❌ Olib tashlandi: `tg.requestFullscreen?.()` va `tg.disableVerticalSwipes()`.
 - ➕ Qo'shildi: `if (tg.isFullscreen) tg.exitFullscreen?.();` (agar foydalanuvchi qurilmasida ilova avval fullscreen rejimda keshlanib qolgan bo'lsa, avtomatik normal holatga qaytaradi).
+- 🔄 To'g'rilandi: `Home` importi Vercel (Linux) uchun to'g'rilandi: `import Home from "./pages/Home/Home"` (katta harflar moslandi).
 - 🔄 To'g'rilandi: `SearchPage` importi fayl nomiga to'g'rilandi.
 
 ### 2) `src/pages/Home/Home.jsx`
+- 🔄 Qayta nomlandi: Diskdagi papka va fayl nomi to'liq `src/pages/Home/Home.jsx` ga keltirildi (Linux / Vercel va VS Code o'rtasidagi case-sensitivity ziddiyati bartaraf etildi).
 - ❌ Olib tashlandi: `mt-[60px]` sun'iy margin.
 - 🔄 Qaytarildi: `<div className="mx-auto max-w-[560px] pb-24">`. Endi `Navbar` ekranning tepa qismiga toza yopishadi va ortiqcha bo'shliqlar yo'q.
 
