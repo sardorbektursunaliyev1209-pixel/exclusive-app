@@ -17,10 +17,7 @@ export default function PageHeader({ title, right }) {
   };
 
   return (
-    <div
-      style={{ paddingTop: "calc(var(--safe-top) + 0.75rem)" }}
-      className="sticky top-0 z-30 -mx-4 mb-3 flex items-center gap-3 bg-[var(--bg)]/90 px-4 pb-3 backdrop-blur-md"
-    >
+    <div className="sticky top-0 z-30 -mx-4 mb-3 flex items-center gap-3 bg-[var(--bg)]/90 px-4 py-3 backdrop-blur-md">
       {!hasTgBack && (
         <button
           onClick={goBack}

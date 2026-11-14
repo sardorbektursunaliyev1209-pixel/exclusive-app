@@ -21,10 +21,7 @@ export default function Navbar({ query, onQuery, autoFocus = false }) {
   const displayName = profile.name || name || "Mehmon";
 
   return (
-    <header
-      style={{ paddingTop: "calc(var(--safe-top) + 0.875rem)" }}
-      className="sticky top-0 z-40 rounded-b-[28px] bg-[var(--card)]/90 px-4 pb-4 shadow-[0_8px_28px_rgba(0,0,0,0.07)] backdrop-blur-md"
-    >
+    <header className="sticky top-0 z-40 rounded-b-[28px] bg-[var(--card)]/90 px-4 pb-4 pt-3.5 shadow-[0_8px_28px_rgba(0,0,0,0.07)] backdrop-blur-md">
       <div className="flex items-center gap-3">
         <Link
           to="/profile"

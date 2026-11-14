@@ -6,25 +6,13 @@
   --text: var(--tg-theme-text-color, #111111);
   --hint: var(--tg-theme-hint-color, #8a8f98);
   --accent: #db4444;
-
-  /* Tepada Telegram tugmalari va telefon chuqurchasi uchun joy */
-  --safe-top: calc(
-    var(--tg-safe-area-inset-top, env(safe-area-inset-top, 0px)) +
-    var(--tg-content-safe-area-inset-top, 0px)
-  );
-}
-
-html,
-body,
-#root {
-  background: var(--bg);
-  min-height: 100dvh;
-  overscroll-behavior: none;
 }
 
 body {
+  background: var(--bg);
   color: var(--text);
   font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  min-height: 100vh;
 }
 
 @keyframes spin {

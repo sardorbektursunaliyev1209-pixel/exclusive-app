@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import BottomNav from "./components/BottomNav";
-import Home from "./pages/Home/Home";
 import Like from "./pages/like/Like";
 import Profile from "./pages/profile/Profile";
 import Cart from "./pages/cart/Cart";
 import ProductDetail from "./pages/product/ProductDetail";
 import { useLocalStorage } from "./hooks/useLocalStorage";
-import SearchPage from "./pages/search/searchPage";
+import SearchPage from "./pages/search/SearchPage";
+import Home from "./pages/home/home";
 
 function Soon({ title }) {
   return (
@@ -29,10 +29,9 @@ export default function App() {
     tg.ready();
     tg.expand();
 
-    if (tg.isVersionAtLeast?.("7.7")) tg.disableVerticalSwipes();
-
-    if (tg.isVersionAtLeast?.("8.0")) {
-      tg.requestFullscreen?.();
+    // Agar Telegramda fullscreen rejimida qolgan bo'lsa, undan chiqish
+    if (tg.isFullscreen) {
+      tg.exitFullscreen?.();
     }
 
     if (tg.isVersionAtLeast?.("6.1")) {
@@ -114,7 +113,6 @@ export default function App() {
             />
           }
         />
-
         <Route
           path="/search"
           element={
