@@ -72,11 +72,11 @@ export default function ProductDetail({
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-[560px] px-4 pb-44">
+      <div className="mx-auto max-w-[560px] px-4 pb-44 animate-pulse">
         <PageHeader title="Mahsulot" />
-        <div className="h-[300px] animate-pulse rounded-3xl bg-[var(--hint)]/15" />
-        <div className="mt-4 h-6 w-3/4 animate-pulse rounded bg-[var(--hint)]/15" />
-        <div className="mt-3 h-8 w-1/2 animate-pulse rounded bg-[var(--hint)]/15" />
+        <div className="h-[300px] rounded-3xl bg-gray-200 dark:bg-gray-700/50" />
+        <div className="mt-4 h-6 w-3/4 rounded bg-gray-200 dark:bg-gray-700/50" />
+        <div className="mt-3 h-8 w-1/2 rounded bg-gray-200 dark:bg-gray-700/50" />
       </div>
     );
   }

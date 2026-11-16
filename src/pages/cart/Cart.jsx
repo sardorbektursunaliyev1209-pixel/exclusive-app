@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import PageHeader from "../../components/PageHeader";
+import { baseUrl } from "../../services/config";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || baseUrl;
 
 // Telegram ichida chiroyli xabar, brauzerda oddiy alert
 const notify = (text) => {

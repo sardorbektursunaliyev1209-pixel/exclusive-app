@@ -16,7 +16,14 @@ export default function Categories({ active, onSelect }) {
 
   useEffect(() => {
     getCategories()
-      .then((result) => setCategories(result || []))
+      .then((result) => {
+        const list = Array.isArray(result)
+          ? result
+          : Array.isArray(result?.results)
+          ? result.results
+          : [];
+        setCategories(list);
+      })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
@@ -40,8 +47,11 @@ export default function Categories({ active, onSelect }) {
           Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="h-[118px] w-[92px] shrink-0 animate-pulse rounded-3xl bg-[var(--hint)]/15"
-            />
+              className="flex w-[92px] shrink-0 flex-col items-center gap-2 rounded-3xl bg-[var(--card)] px-2 pb-3 pt-3 shadow-[0_2px_10px_rgba(0,0,0,0.04)] animate-pulse"
+            >
+              <div className="h-[64px] w-[64px] rounded-full bg-gray-200 dark:bg-gray-700/50" />
+              <div className="h-3 w-14 rounded bg-gray-200 dark:bg-gray-700/50" />
+            </div>
           ))}
 
         {categories.map((item) => {

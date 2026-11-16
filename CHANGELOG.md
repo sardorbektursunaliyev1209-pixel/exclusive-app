@@ -65,6 +65,15 @@ Quyidagi fayllardagi fullscreen moslamalari va ularning asoratlari to'liq olib t
 - ❌ Olib tashlandi: `overscroll-behavior: none` (brauzerlarda tabiiy harakatni cheklab qo'ygan edi).
 - 🔄 Qaytarildi: Toza fon va balandlik (`min-height: 100vh`).
 
+### 7) `src/pages/Home/ProductGrid.jsx` & `Categories.jsx` (Skeleton va API xatoliklar)
+- 🔄 Skeleton qayta yaratildi: Xira, ko'rinmas `bg-[var(--hint)]/15` bitta to'rtburchak o'rniga haqiqiy mahsulot kartochkasi shaklidagi zamonaviy `CardSkeleton` (rasm, sarlavha, yulduzcha, narx, tugma bloklari bilan) yaratildi.
+- 🛡️ API ma'lumotlari xavfsizligi: Backenddan kelgan javob massiv (`Array`) bo'lmay qolgan holatlar uchun `Array.isArray` tekshiruvi qo'shildi (`data.map` xatolarining oldi olindi).
+- ⚠️ Xatolik va Qayta yuklash: Server xato berganida yoki aloqa uzilganda foydalanuvchiga xatolik haqida xabar va "Qayta yuklash" tugmasi chiqishi ta'minlandi.
+- 🏷️ Kategoriya filtri: `ProductGrid` ga `category` prop qo'shildi va kategoriya bo'yicha saralash yoqildi.
+
+### 8) `src/pages/cart/Cart.jsx` (API URL birlashtirildi)
+- 🔄 To'g'rilandi: `Cart.jsx` endi to'g'ridan-to'g'ri `services/config.js` dagi `baseUrl` dan foydalanadi (3000-portga ulanish xatosi bartaraf etildi).
+
 ---
 
 ## 4. 🧭 Keyingi AI / Dasturchilar uchun Muhim Qoidalar (Guidelines)
