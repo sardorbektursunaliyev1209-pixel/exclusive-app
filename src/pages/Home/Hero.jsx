@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../../services/config';
 
 const DELAY = 4000;
 
-const slides = [
+// Backend ishlamasa yoki bannerlar bo'sh bo'lsa, shu statik slaydlar ko'rinadi
+const fallbackSlides = [
   {
     badge: 'Yangi',
     small: 'iPhone 14 seriyasi',
@@ -33,23 +36,137 @@ const slides = [
 ];
 
 export default function Hero() {
+  const navigate = useNavigate();
   const [i, setI] = useState(0);
+  const [banners, setBanners] = useState(null); // null = yuklanmoqda
   const startX = useRef(0);
+  const swiped = useRef(false);
 
+  // Bannerlarni backenddan olish
   useEffect(() => {
-    const t = setTimeout(() => setI((p) => (p + 1) % slides.length), DELAY);
+    let alive = true;
+    fetch(`${baseUrl}/banner/list/`)
+      .then((res) => {
+        if (!res.ok) throw new Error('banner xatosi');
+        return res.json();
+      })
+      .then((data) => {
+        if (alive) setBanners(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        if (alive) setBanners([]); // xato bo'lsa statik slaydlar ko'rsatiladi
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const items = banners && banners.length > 0 ? banners : fallbackSlides;
+  const count = items.length;
+
+  // Avtomatik aylanish (bitta slayd bo'lsa aylanmaydi)
+  useEffect(() => {
+    if (banners === null || count < 2) return;
+    const t = setTimeout(() => setI((p) => (p + 1) % count), DELAY);
     return () => clearTimeout(t);
-  }, [i]);
+  }, [i, count, banners]);
 
-  const go = (n) => setI((n + slides.length) % slides.length);
+  const go = (n) => setI((n + count) % count);
 
-  const onTouchStart = (e) => (startX.current = e.touches[0].clientX);
+  const onTouchStart = (e) => {
+    startX.current = e.touches[0].clientX;
+    swiped.current = false;
+  };
   const onTouchEnd = (e) => {
     const diff = e.changedTouches[0].clientX - startX.current;
-    if (Math.abs(diff) > 40) go(diff < 0 ? i + 1 : i - 1);
+    if (Math.abs(diff) > 40) {
+      swiped.current = true;
+      go(diff < 0 ? i + 1 : i - 1);
+    }
   };
 
-  const { badge, small, title, btn, stat, statLabel, bg } = slides[i];
+  // Yuklanayotganda bo'sh joy (sakrab ketmasligi uchun)
+  if (banners === null) {
+    return (
+      <div className="mx-4 mt-4 h-[190px] animate-pulse rounded-[24px] bg-black/10" />
+    );
+  }
+
+  const current = items[i % count];
+  const isImage = Boolean(current.image);
+
+  // Banner bosilganda: ichki sahifa yoki tashqi havola
+  const openLink = () => {
+    if (swiped.current || !current.link) return;
+    if (/^https?:\/\//.test(current.link)) {
+      window.open(current.link, '_blank');
+    } else {
+      navigate(current.link);
+    }
+  };
+
+  const dots = (
+    <div className="absolute bottom-3 left-5 z-20 flex gap-1.5">
+      {items.map((_, k) => (
+        <button
+          key={k}
+          onClick={(e) => {
+            e.stopPropagation();
+            go(k);
+          }}
+          aria-label={`${k + 1}-slayd`}
+          className="relative h-[6px] w-6 overflow-hidden rounded-full bg-white/30"
+        >
+          {k === i && (
+            <span
+              className="absolute inset-y-0 left-0 rounded-full bg-white"
+              style={{ animation: `heroBar ${DELAY}ms linear forwards` }}
+            />
+          )}
+          {k < i && <span className="absolute inset-0 rounded-full bg-white" />}
+        </button>
+      ))}
+    </div>
+  );
+
+  // ---------- Rasmli banner (backenddan) ----------
+  if (isImage) {
+    return (
+      <div
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onClick={openLink}
+        className={`relative mx-4 mt-4 h-[190px] overflow-hidden rounded-[24px] bg-black/10 text-white shadow-lg ${
+          current.link ? 'cursor-pointer' : ''
+        }`}
+      >
+        <style>{`@keyframes heroImgFade { from { opacity: 0; } to { opacity: 1; } }`}</style>
+
+        <img
+          key={current.id || i}
+          src={current.image}
+          alt={current.title || ''}
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ animation: 'heroImgFade 0.5s ease both' }}
+        />
+
+        {/* Matn va nuqtalar ko'rinishi uchun pastki soya */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
+
+        {current.title && (
+          <h3 className="absolute bottom-8 left-5 right-5 z-10 text-[19px] font-extrabold leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+            {current.title}
+          </h3>
+        )}
+
+        {count > 1 && dots}
+      </div>
+    );
+  }
+
+  // ---------- Statik (zaxira) banner ----------
+  const { badge, small, title, btn, stat, statLabel, bg } = current;
 
   return (
     <div
@@ -94,24 +211,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="absolute bottom-3 left-5 z-10 flex gap-1.5">
-        {slides.map((_, k) => (
-          <button
-            key={k}
-            onClick={() => go(k)}
-            aria-label={`${k + 1}-slayd`}
-            className="relative h-[6px] w-6 overflow-hidden rounded-full bg-white/30"
-          >
-            {k === i && (
-              <span
-                className="absolute inset-y-0 left-0 rounded-full bg-white"
-                style={{ animation: `heroBar ${DELAY}ms linear forwards` }}
-              />
-            )}
-            {k < i && <span className="absolute inset-0 rounded-full bg-white" />}
-          </button>
-        ))}
-      </div>
+      {dots}
     </div>
   );
 }

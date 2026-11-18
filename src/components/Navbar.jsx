@@ -4,9 +4,11 @@ import {
   FaTimes,
   FaMapMarkerAlt,
   FaChevronDown,
+  FaHeadset,
 } from "react-icons/fa";
 import { useTelegram } from "../hooks/useTelegram";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import HelpSheet from "../components/HelpSheet";
 
 export default function Navbar({ query, onQuery, autoFocus = false }) {
   const { name, photo, haptic } = useTelegram();
@@ -36,25 +38,15 @@ export default function Navbar({ query, onQuery, autoFocus = false }) {
             )}
           </div>
         </Link>
-
         <div className="min-w-0 flex-1 leading-tight">
           <small className="text-[12px] text-[var(--hint)]">
             Xush kelibsiz 👋
           </small>
           <b className="block truncate text-[17px]">{displayName}</b>
         </div>
-
-        <Link
-          to="/profile"
-          onClick={() => haptic?.()}
-          className="flex max-w-[140px] items-center gap-1.5 rounded-full bg-[var(--bg)] py-2 pl-2.5 pr-3 text-[13px] font-medium transition-transform active:scale-95"
-        >
-          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--accent)]/15 text-[var(--accent)]">
-            <FaMapMarkerAlt size={11} />
-          </span>
-          <span className="truncate">{profile.city || "Shahar tanlang"}</span>
-          <FaChevronDown size={9} className="shrink-0 text-[var(--hint)]" />
-        </Link>
+        <span className="grid h-12 w-12 place-items-center rounded-[17px]  bg-[var(--accent)]/10 text-[var(--accent)]">
+          <FaHeadset size={20} />
+        </span>{" "}
       </div>
 
       <label className="mt-3.5 flex h-12 items-center gap-3 rounded-2xl bg-[var(--bg)] px-4 text-[var(--hint)] ring-2 ring-transparent transition-all focus-within:bg-[var(--card)] focus-within:ring-[var(--accent)]/40">

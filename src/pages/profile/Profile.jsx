@@ -11,6 +11,7 @@ import {
   FaCheckCircle,
   FaPhoneAlt,
   FaCity,
+  FaStar,
 } from "react-icons/fa";
 import { useTelegram } from "../../hooks/useTelegram";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -29,6 +30,22 @@ const CITIES = [
 ];
 const ADDRESS_TAGS = ["Uy", "Ish", "Boshqa"];
 
+// Dizaynni brauzerda Premium holatida ko'rish uchun vaqtincha true qiling.
+// Tayyor bo'lgach albatta false qilib qo'ying.
+const PREVIEW_PREMIUM = false;
+
+// Karta fonini to'liq qoplaydigan yulduzchalar naqshi
+const STAR_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72"><g fill="white" fill-opacity="0.16"><path d="M18 6l3 6.1 6.7 1-4.9 4.7 1.2 6.7L18 21.3l-6 3.2 1.2-6.7-4.9-4.7 6.7-1z"/><path d="M54 42l3 6.1 6.7 1-4.9 4.7 1.2 6.7L54 57.3l-6 3.2 1.2-6.7-4.9-4.7 6.7-1z"/></g></svg>`;
+const STAR_PATTERN = `url("data:image/svg+xml,${encodeURIComponent(STAR_SVG)}")`;
+
+// Karta fonidagi suzib yuruvchi bezaklar (faqat fon, matn ustiga chiqmaydi)
+const FLOATERS = [
+  { icon: "🎁", top: "8%", right: "6%", size: 22, delay: "0s" },
+  { icon: "💎", top: "36%", right: "15%", size: 20, delay: "0.6s" },
+  { icon: "🔮", top: "56%", right: "5%", size: 20, delay: "1.2s" },
+  { icon: "✨", top: "10%", right: "26%", size: 16, delay: "1.8s" },
+];
+
 // 901234567 -> +998 90 123 45 67
 const formatPhone = (d) => {
   if (!d) return "";
@@ -41,6 +58,9 @@ const inputCls =
 
 export default function Profile({ cartCount = 0, likeCount = 0 }) {
   const { user, name, photo, haptic } = useTelegram();
+
+  // Telegram Premium foydalanuvchisimi
+  const isPremium = PREVIEW_PREMIUM || !!user?.is_premium;
 
   const [profile, setProfile] = useLocalStorage("profile", {
     name: "",
@@ -140,12 +160,64 @@ export default function Profile({ cartCount = 0, likeCount = 0 }) {
 
   return (
     <div className="mx-auto max-w-[560px] px-4 pb-28 pt-6">
+      {/* Bezak animatsiyalari */}
+      <style>{`
+        @keyframes premiumFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-7px); }
+        }
+        @keyframes premiumShine {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+        @keyframes starDrift {
+          to { background-position: 72px 72px; }
+        }
+      `}</style>
+
       {/* Yuqori karta */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#6d28d9] p-5 text-white shadow-lg">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#8a44d6] via-[#a45fe2] to-[#bb7cea] p-5 text-white shadow-lg">
+        {/* Butun fonni qoplovchi yulduzchalar naqshi */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: STAR_PATTERN,
+            backgroundSize: "72px 72px",
+            animation: "starDrift 40s linear infinite",
+          }}
+        />
+
+        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/25 blur-2xl" />
+
+        {/* Fondagi suzib yuruvchi bezaklar */}
+        {FLOATERS.map((f, i) => (
+          <span
+            key={i}
+            aria-hidden="true"
+            className="pointer-events-none absolute grid select-none place-items-center rounded-full bg-white/15"
+            style={{
+              top: f.top,
+              right: f.right,
+              width: f.size * 1.7,
+              height: f.size * 1.7,
+              fontSize: f.size,
+              boxShadow: "0 0 18px rgba(255,255,255,0.35)",
+              animation: `premiumFloat 3.2s ease-in-out ${f.delay} infinite`,
+            }}
+          >
+            {f.icon}
+          </span>
+        ))}
 
         <div className="relative flex items-center gap-4">
-          <div className="rounded-full bg-white/30 p-[2px]">
+          <div
+            className={`rounded-full p-[2px] ${
+              isPremium
+                ? "bg-gradient-to-br from-[#6d8bff] via-[#b46cff] to-[#ff8ad8]"
+                : "bg-white/30"
+            }`}
+          >
             <div className="grid h-20 w-20 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-[#db4444] to-[#ff8a5c] text-3xl font-bold">
               {photo ? (
                 <img src={photo} alt="" className="h-full w-full object-cover" />
@@ -156,9 +228,32 @@ export default function Profile({ cartCount = 0, likeCount = 0 }) {
           </div>
 
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-xl font-extrabold">{fullName}</h1>
+            <h1 className="flex items-center gap-1.5 text-xl font-extrabold">
+              <span className="truncate">{fullName}</span>
+              {isPremium && (
+                <span
+                  title="Telegram Premium"
+                  className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#6d8bff] to-[#b46cff] text-white"
+                >
+                  <FaStar size={11} />
+                </span>
+              )}
+            </h1>
             {user?.username && (
               <p className="text-sm opacity-80">@{user.username}</p>
+            )}
+            {isPremium && (
+              <span
+                className="mt-1 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #6d8bff, #b46cff, #ff8ad8, #6d8bff)",
+                  backgroundSize: "200% 100%",
+                  animation: "premiumShine 3s linear infinite",
+                }}
+              >
+                Premium
+              </span>
             )}
             {profile.phone && (
               <p className="mt-0.5 flex items-center gap-1.5 text-xs opacity-80">
